@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44">
+  <!-- LuckyCatSmile mark: the beckoning cat on a lacquer-red seal — the ears,
+       the two eyes, the smile, and the gold coin at its shoulder. A
+       maneki-neko reduced to the four strokes that still read it at 16px.
+
+       A rounded SQUARE rather than a disc: this design is printed, and the
+       mark is a seal stamped on the page.
+
+       The first <rect fill> is what app/apple-icon.tsx reads as the 180x180
+       background plate — the red seal itself here, so iOS composites the mark
+       onto its own ground rather than onto black. src/app/favicon.ico is the
+       same artwork rasterised at 16/32/48 — see scripts/make-favicon.py. -->
+  <rect width="44" height="44" rx="13" fill="#c8321e"/>
+  <path d="M9 34V13.5c0-1 1.1-1.5 1.8-.9L17 18h10l6.2-5.4c.7-.6 1.8-.1 1.8.9V34a3 3 0 0 1-3 3H12a3 3 0 0 1-3-3z" fill="#fff6ea"/>
+  <path d="M14.5 25.5q2.3-2.6 4.6 0M24.9 25.5q2.3-2.6 4.6 0" stroke="#2a1d17" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M17.5 30q4.5 3.6 9 0" stroke="#c8321e" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="35.5" cy="9" r="4" fill="#f1dda8" stroke="#c9962b" stroke-width="1.2"/>
+</svg>
