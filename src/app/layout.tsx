@@ -30,7 +30,43 @@ import './globals.css'
 // Zen Kaku Gothic New carries everything read as text. 900 is loaded but
 // unused — 700 is the heaviest the design goes, on buttons and eyebrow labels.
 const youngSerif = Young_Serif({ variable: '--font-young-serif', subsets: ['latin'], weight: ['400'] })
-const zen = Zen_Kaku_Gothic_New({ variable: '--font-zen', subsets: ['latin'], weight: ['400', '500', '700'] })
+/*
+ * `preload: false` IS LOAD-BEARING, and it is the reason this site stopped
+ * answering 502 in production on 2026-11-25.
+ *
+ * Zen Kaku Gothic New is a JAPANESE family. Even asked for `subsets: ['latin']`
+ * Google serves it sliced into dozens of `unicode-range` files, and `next/font`
+ * emits a `rel=preload` for every one of them — in the RESPONSE HEADER, not the
+ * HTML. Measured on `GET /`: 48 preload entries, a `Link` header of 5,909 bytes
+ * and 6,314 bytes of headers in total.
+ *
+ * nginx's default `proxy_buffer_size` is 4,096 bytes. Anything larger and it
+ * refuses the response with
+ *
+ *     upstream sent too big header while reading response header from upstream
+ *
+ * and returns 502 — with the app perfectly healthy behind it, which is what
+ * made it slow to find. Cloudflare then shows its own "Bad gateway" page and
+ * the whole thing looks like a hosting problem.
+ *
+ * With this flag the same request carries 2 preload entries and 622 bytes of
+ * headers: ten times smaller, and far inside the buffer. The cost is that the
+ * body face is no longer preloaded, so it arrives one round trip later; with
+ * next/font's default `display: swap` that is a brief fallback flash, which is
+ * the right trade against a page that does not load at all. 46 of those 48
+ * preloads were for glyph ranges an English-only site never renders.
+ *
+ * The buffer is ALSO raised in deploy/nginx-canonical-host.conf, because the
+ * proxy should not be one font away from failing on any site. Both layers, on
+ * purpose: this one keeps the header small, that one keeps a large header from
+ * being fatal.
+ */
+const zen = Zen_Kaku_Gothic_New({
+  variable: '--font-zen',
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  preload: false,
+})
 
 /**
  * Subscribe capture: every entry point on this site — the newsletter form and,
